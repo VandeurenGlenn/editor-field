@@ -32,10 +32,10 @@ export default [{
     format: 'es'
   },
   external: [
-    './ts-worker.js',
-    './html-worker.js',
-    './css-worker.js',
-    './editor-worker.js'
+    './ts.worker.js',
+    './html.worker.js',
+    './css.worker.js',
+    './editor.worker.js'
   ],
   plugins: [
     clean(),
