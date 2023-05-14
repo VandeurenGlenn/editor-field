@@ -2,12 +2,11 @@ import { convertTheme } from '@vandeurenglenn/monaco-utils'
 
 declare type FieldDirection = 'horizontal' | 'vertical'
 // dirty hack to add monaco styles into the shadowRoot
+
 const styles = Array.from(document.querySelectorAll('style'))
-
 // @ts-ignore
-import monaco from './monaco-loader.js'
-import { Uri, languages } from 'monaco-editor'
-
+const importee = await import('./monaco-loader.js')
+const monaco = importee.default
 
 const monacoStyles = Array.from(document.querySelectorAll('style')).filter(el => !styles.includes(el))
 

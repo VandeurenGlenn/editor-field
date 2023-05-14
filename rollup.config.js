@@ -32,6 +32,7 @@ export default [{
     format: 'es'
   },
   external: [
+    './monaco-loader.js',
     './ts.worker.js',
     './html.worker.js',
     './css.worker.js',
