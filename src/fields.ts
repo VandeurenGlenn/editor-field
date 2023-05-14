@@ -4,14 +4,16 @@ declare type FieldDirection = 'horizontal' | 'vertical'
 // dirty hack to add monaco styles into the shadowRoot
 const styles = Array.from(document.querySelectorAll('style'))
 
-const importee = await import('@monaco-import');
-globalThis.monaco = importee.default
+// @ts-ignore
+import monaco from './monaco-loader.js'
+import { Uri, languages } from 'monaco-editor'
+
 
 const monacoStyles = Array.from(document.querySelectorAll('style')).filter(el => !styles.includes(el))
 
 export class EditorFields extends HTMLElement {
   #fields = [];
-  theme;
+  theme: any;
   #enterAmount: number = 0
 
   constructor() {
@@ -28,35 +30,36 @@ export class EditorFields extends HTMLElement {
     globalThis.onresize = this.resizeFields.bind(this)
   }
 
-  setCompilerOptions(options) {
+  setCompilerOptions(options: monaco.languages.typescript.CompilerOptions){
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       ...monaco.languages.typescript.javascriptDefaults.getCompilerOptions(),
-        target: monaco.languages.typescript.ScriptTarget.Latest,
-        allowNonTsExtensions: true,
-        moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-        module: monaco.languages.typescript.ModuleKind.ESNext,
-        esModuleInterop: true,
-        allowJs: true,
-        isolatedModules: true
-    });
+      target: monaco.languages.typescript.ScriptTarget.Latest,
+      allowNonTsExtensions: true,
+      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      module: monaco.languages.typescript.ModuleKind.ESNext,
+      esModuleInterop: true,
+      allowJs: true,
+      isolatedModules: true
+    })
   }
 
-  defineTheme(name, theme) {
+  defineTheme(name: string, theme: monaco.editor.IStandaloneThemeData) {
     // @ts-ignore
     monaco.editor.defineTheme(name, convertTheme(theme))
   }
 
-  setTheme(theme) {
+  setTheme(theme: string) {
     this.theme = theme
     // this.#fields[0]._themeService.setTheme(theme)
     monaco.editor.setTheme(theme)
   }
 
-  getModel(path) {
+  getModel(path: string): monaco.editor.IModel {
+    // @ts-ignore
     return monaco.editor.getModel(`file://project/${path}`)
   }
 
-  createModel(path: string, code: string, language: string = 'javascript') {
+  createModel(path: string, code: string, language: string) {
     if (this.getModel(path)) return
     
     const model = monaco.editor.createModel(code, language, monaco.Uri.parse(`file://project/${path}`));
@@ -65,12 +68,12 @@ export class EditorFields extends HTMLElement {
     })
   }
 
-  setModel(path, code, language, fieldId = 1) {
+  setModel(path: string, code: string, language: string, fieldId = 1) {
     !this.getModel(path) && this.createModel(path, code, language)
     this.#fields[fieldId - 1].setModel(this.getModel(path));
   }
 
-  addField(path?, code?, language?, direction: FieldDirection = 'horizontal') {
+  addField(path?: any, code?: any, language?: any, direction: FieldDirection = 'horizontal') {
     
     const span = document.createElement('span')
     span.classList.add('container')
@@ -102,7 +105,7 @@ export class EditorFields extends HTMLElement {
 
     const totalFields = this.#fields.length
     
-
+    // @ts-ignore
     field.direction = direction
     this.#fields[totalFields] = field
 
@@ -112,13 +115,13 @@ export class EditorFields extends HTMLElement {
     
     if(verticalFields.length > 0) {
       this.style.setProperty(`--editor-container-height`, `${this.clientHeight / rows.length}px`)
-      const verticalContainers = Array.from(rows[1].querySelectorAll('.container'))
+      const verticalContainers: HTMLElement[] = Array.from(rows[1].querySelectorAll('.container'))
       for (const container of verticalContainers) {
         container.style.setProperty(`--editor-container-width`, `${this.clientWidth / verticalContainers.length}px`)
       }
     } 
 
-    const horizontalContainers = Array.from(rows[0].querySelectorAll('.container'))
+    const horizontalContainers: HTMLElement[] = Array.from(rows[0].querySelectorAll('.container'))
 
     for (const container of horizontalContainers) {
       container.style.setProperty(`--editor-container-width`, `${this.clientWidth / horizontalContainers.length}px`)
@@ -141,8 +144,8 @@ export class EditorFields extends HTMLElement {
     }
   }
 
-  setupTriggerSuggestOnDoubleEnter(field) {
-    field.onKeyUp((e) => {
+  setupTriggerSuggestOnDoubleEnter(field: monaco.editor.IStandaloneCodeEditor) {
+    field.onKeyUp((e: { keyCode: monaco.KeyCode }) => {
       const position = field.getPosition();
       const text = field.getModel().getLineContent(position.lineNumber).trim();
 

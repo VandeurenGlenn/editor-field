@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "build": "rollup -c && rollup -c rollup.monaco.config.js",
+    "build": "rollup -c",
     "watch": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
