@@ -75,7 +75,7 @@ export default [{
   ],
   output: [{
     format: 'iife',
-    dir: 'exports/monaco'
+    dir: 'exports'
   }]
 }, {
   input: [
@@ -83,7 +83,7 @@ export default [{
   ],
   output: [{
     format: 'iife',
-    dir: 'exports/monaco'
+    dir: 'exports'
   }]
 }, {
   input: [
@@ -91,7 +91,7 @@ export default [{
   ],
   output: [{
     format: 'iife',
-    dir: 'exports/monaco'
+    dir: 'exports'
   }]
 }, {
   input: [
@@ -99,7 +99,7 @@ export default [{
   ],
   output: [{
     format: 'iife',
-    dir: 'exports/monaco'
+    dir: 'exports'
   }]
 }, {
   input: [
@@ -107,6 +107,6 @@ export default [{
   ],
   output: [{
     format: 'iife',
-    dir: 'exports/monaco'
+    dir: 'exports'
   }]
 }]
