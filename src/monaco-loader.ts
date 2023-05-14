@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor'
 
-MonacoEnvironment = {
+globalThis.MonacoEnvironment = {
 	getWorkerUrl: function (moduleId, label) {
 		if (label === 'typescript' || label === 'javascript') {
 			return './ts.worker.js';
