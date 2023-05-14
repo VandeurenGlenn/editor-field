@@ -60,8 +60,11 @@ export class EditorFields extends HTMLElement {
 
   createModel(path: string, code: string, language: string = 'javascript') {
     if (this.getModel(path)) return
-
-    monaco.editor.createModel(code, language, monaco.Uri.parse(`file://project/${path}`));
+    
+    const model = monaco.editor.createModel(code, language, monaco.Uri.parse(`file://project/${path}`));
+    model.onDidChangeContent( (detail) => { 
+      document.dispatchEvent(new CustomEvent('content-change', { detail: {modelPath: path, ...detail} }))
+    })
   }
 
   setModel(path, code, language, fieldId = 1) {
@@ -123,7 +126,6 @@ export class EditorFields extends HTMLElement {
 
     this.setupTriggerSuggestOnDoubleEnter(field)
     this.setModel(path, code, language, this.#fields.length)
-
     this.#fields.length > 1 && this.resizeFields()
   }
 
