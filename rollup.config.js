@@ -33,8 +33,7 @@ export default [{
   },
   external: [
     './identity.js',
-    './monaco/monaco-loader.js',
-    '@monaco-import'
+    './monaco-loader.js'
   ],
   plugins: [
     clean(),
