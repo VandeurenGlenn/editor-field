@@ -29,7 +29,7 @@ export class EditorFields extends HTMLElement {
     globalThis.onresize = this.resizeFields.bind(this)
   }
 
-  setCompilerOptions(options: monaco.languages.typescript.CompilerOptions){
+  setCompilerOptions(options){
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       ...monaco.languages.typescript.javascriptDefaults.getCompilerOptions(),
       target: monaco.languages.typescript.ScriptTarget.Latest,
@@ -42,7 +42,7 @@ export class EditorFields extends HTMLElement {
     })
   }
 
-  defineTheme(name: string, theme: monaco.editor.IStandaloneThemeData) {
+  defineTheme(name: string,) {
     // @ts-ignore
     monaco.editor.defineTheme(name, convertTheme(theme))
   }
@@ -53,7 +53,7 @@ export class EditorFields extends HTMLElement {
     monaco.editor.setTheme(theme)
   }
 
-  getModel(path: string): monaco.editor.IModel {
+  getModel(path: string) {
     // @ts-ignore
     return monaco.editor.getModel(`file://project/${path}`)
   }
@@ -143,8 +143,8 @@ export class EditorFields extends HTMLElement {
     }
   }
 
-  setupTriggerSuggestOnDoubleEnter(field: monaco.editor.IStandaloneCodeEditor) {
-    field.onKeyUp((e: { keyCode: monaco.KeyCode }) => {
+  setupTriggerSuggestOnDoubleEnter(field) {
+    field.onKeyUp((e) => {
       const position = field.getPosition();
       const text = field.getModel().getLineContent(position.lineNumber).trim();
 
