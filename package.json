@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Editor view using Monaco",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./exports/fields.js"
+    }
+  },
   "scripts": {
     "build": "rollup -c && rollup -c rollup.monaco.config.js",
     "watch": "rollup -c -w",
