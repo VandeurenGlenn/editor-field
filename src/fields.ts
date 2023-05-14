@@ -1,6 +1,6 @@
 import { convertTheme } from '@vandeurenglenn/monaco-utils'
 
-
+declare type FieldDirection = 'horizontal' | 'vertical'
 // dirty hack to add monaco styles into the shadowRoot
 const styles = Array.from(document.querySelectorAll('style'))
 
@@ -11,7 +11,6 @@ const monacoStyles = Array.from(document.querySelectorAll('style')).filter(el =>
 
 export class EditorFields extends HTMLElement {
   #fields = [];
-  #models = {};
   theme;
   #enterAmount: number = 0
 
@@ -23,10 +22,8 @@ export class EditorFields extends HTMLElement {
 
     for (const style of monacoStyles) {
       this.shadowRoot.prepend(style.cloneNode(true))
-      document.head.removeChild(style)
+      // document.head.removeChild(style)
     }
-
-    this.addField()
 
     globalThis.onresize = this.resizeFields.bind(this)
   }
@@ -57,34 +54,72 @@ export class EditorFields extends HTMLElement {
     }
   }
 
+  getModel(path) {
+    return monaco.editor.getModel(`file://project/${path}`)
+  }
+
   createModel(path: string, code: string, language: string = 'javascript') {
-    this.#models[path] = monaco.editor.createModel(code, language, monaco.Uri.parse(`file://project/${path}`));
+    if (this.getModel(path)) return
+
+    monaco.editor.createModel(code, language, monaco.Uri.parse(`file://project/${path}`));
   }
 
   setModel(path, code, language, fieldId = 1) {
-    !this.#models[path] && this.createModel(path, code, language)
-    this.#fields[fieldId - 1].setModel(this.#models[path]);
+    !this.getModel(path) && this.createModel(path, code, language)
+    this.#fields[fieldId - 1].setModel(this.getModel(path));
   }
 
-  addField(path?, code?, language?) {
-    const totalFields = this.#fields.length
-    const width = this.clientWidth / (totalFields + 1)
-    
-    this.style.setProperty(`--editor-container-width`, `${width}px`)
+  addField(path?, code?, language?, direction: FieldDirection = 'horizontal') {
     
     const span = document.createElement('span')
     span.classList.add('container')
-    this.shadowRoot.appendChild(span)
+
+    const rows = Array.from(this.shadowRoot.querySelectorAll('flex-row'))
+    
+    if (direction === 'horizontal') {
+      if (!rows[0]) {
+        rows[0] = document.createElement('flex-row')
+        this.shadowRoot.appendChild(rows[0])
+      }
+      rows[0].appendChild(span)
+    } else {
+      if (!rows[1]) {
+        rows[1] = document.createElement('flex-row')
+        this.shadowRoot.appendChild(rows[1])
+      }
+      rows[1].appendChild(span)
+    }
 
     
     const field = monaco.editor.create(span, {
       theme: this.theme,
       language,
-      width,
       automaticLayout: true
     });
+
+    const totalFields = this.#fields.length
     
+
+    field.direction = direction
     this.#fields[totalFields] = field
+
+    const horizontalFields = this.#fields.filter(field => field.direction === 'horizontal')
+    const verticalFields = this.#fields.filter(field => field.direction === 'vertical')
+ 
+    
+    if(verticalFields.length > 0) {
+      this.style.setProperty(`--editor-container-height`, `${this.clientHeight / rows.length}px`)
+      const verticalContainers = Array.from(rows[1].querySelectorAll('.container'))
+      for (const container of verticalContainers) {
+        container.style.setProperty(`--editor-container-width`, `${this.clientWidth / verticalContainers.length}px`)
+      }
+    } 
+
+    const horizontalContainers = Array.from(rows[0].querySelectorAll('.container'))
+
+    for (const container of horizontalContainers) {
+      container.style.setProperty(`--editor-container-width`, `${this.clientWidth / horizontalContainers.length}px`)
+    }
 
     this.setupTriggerSuggestOnDoubleEnter(field)
     this.setModel(path, code, language, this.#fields.length)
@@ -125,17 +160,22 @@ export class EditorFields extends HTMLElement {
 <style>
   :host {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     pointer-events: auto;
   }
 
+  flex-row {
+    height: 100%;
+    display: block;
+    width: 100%;
+  }
 .container {
-  display: block;
+  display: inline-block;
   
   width: var(--editor-container-width, 100%);
-  height: 100%;
+  height: var(--editor-container-height, 100%);
 }
 </style>
     `

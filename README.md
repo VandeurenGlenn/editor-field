@@ -22,16 +22,16 @@ editorField.defineTheme('palenight-italic', theme)
 editorField.setTheme('palenight-italic')
 // editorField.setCompilerOptions()
 
-// load instances
+// load models
 editorField.createModel('my-thing.js', 'export default class MyThing { getThing () { return "theThing"}}', 'javascript')
-editorField.createModel('thing.js',
-  `import Thing from "./my-thing.js"
+
+await editorField.addField('thing.js', `import Thing from "./my-thing.js"
 const thing = new Thing()`,
-  'javascript')
+        'javascript')
 
-editorField.setModel('thing.js') // show
+await editorField.addField('index.html', '<html></html>', 'html')
 
-editorField.addField('index.html', '<html></html>', 'html')
+await editorField.addField('index.css', 'html { display: block;}', 'css', 'vertical')
 
-editorField.addField('index.css', 'html {}', 'css')
+editorField.setModel('my-thing.js')
 ```
