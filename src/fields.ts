@@ -80,14 +80,14 @@ export class EditorFields extends HTMLElement {
     if (direction === 'horizontal') {
       if (!rows[0]) {
         rows[0] = document.createElement('span')
-        rows[0].classList.add('.row')
+        rows[0].classList.add('row')
         this.shadowRoot.appendChild(rows[0])
       }
       rows[0].appendChild(span)
     } else {
       if (!rows[1]) {
         rows[1] = document.createElement('span')
-        rows[1].classList.add('.row')
+        rows[1].classList.add('row')
         this.shadowRoot.appendChild(rows[1])
       }
       rows[1].appendChild(span)
