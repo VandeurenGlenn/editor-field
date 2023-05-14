@@ -5,7 +5,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./exports/fields.js"
+      "import": "./exports/fields.js",
+      "types": "./exports/fields.d.ts"
+    }, 
+    "./monaco-loader": {
+      "import": "./exports/monaco-loader.js",
+      "types": "./exports/monaco-loader.d.ts"
     }
   },
   "scripts": {

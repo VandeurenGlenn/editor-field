@@ -3,6 +3,7 @@
     "module": "ESNext",
     "target": "ESNext",
     "outDir": "./exports",
+    "declaration": true,
     "moduleResolution":"NodeNext",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
