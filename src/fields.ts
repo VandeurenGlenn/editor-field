@@ -77,17 +77,19 @@ export class EditorFields extends HTMLElement {
     const span = document.createElement('span')
     span.classList.add('container')
 
-    const rows = Array.from(this.shadowRoot.querySelectorAll('flex-row'))
+    const rows = Array.from(this.shadowRoot.querySelectorAll('.row'))
     
     if (direction === 'horizontal') {
       if (!rows[0]) {
-        rows[0] = document.createElement('flex-row')
+        rows[0] = document.createElement('span')
+        rows[0].classList.add('.row')
         this.shadowRoot.appendChild(rows[0])
       }
       rows[0].appendChild(span)
     } else {
       if (!rows[1]) {
-        rows[1] = document.createElement('flex-row')
+        rows[1] = document.createElement('span')
+        rows[1].classList.add('.row')
         this.shadowRoot.appendChild(rows[1])
       }
       rows[1].appendChild(span)
@@ -168,7 +170,7 @@ export class EditorFields extends HTMLElement {
     pointer-events: auto;
   }
 
-  flex-row {
+  .row {
     height: 100%;
     display: block;
     width: 100%;
