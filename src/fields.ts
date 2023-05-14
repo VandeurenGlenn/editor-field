@@ -14,6 +14,7 @@ export class EditorFields extends HTMLElement {
   #fields = [];
   theme: any;
   #enterAmount: number = 0
+  monaco = monaco
 
   constructor() {
     super()
