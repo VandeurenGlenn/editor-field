@@ -49,9 +49,7 @@ export class EditorFields extends HTMLElement {
   setTheme(theme) {
     this.theme = theme
     // this.#fields[0]._themeService.setTheme(theme)
-    for (const field of this.#fields) {
-      field._themeService.setTheme(theme)
-    }
+    monaco.editor.setTheme(theme)
   }
 
   getModel(path) {
