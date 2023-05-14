@@ -5,6 +5,10 @@
   "type": "module",
   "exports": {
     ".": {
+      "import": "./exports/index.js",
+      "types": "./exports/index.d.ts"
+    },
+    "./fields": {
       "import": "./exports/fields.js",
       "types": "./exports/fields.d.ts"
     },

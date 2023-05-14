@@ -10,10 +10,6 @@ import fs from 'fs-extra'
 import { join, relative } from 'path'
 import { unlink, readdir } from 'fs/promises';
 
-const input = [
-  ...(await readdir('./src')).map(path => join('./src', path)).filter(path => !path.includes('vs-themes'))
-]
-
 
 // const templates = (await readdir('./src/templates')).map(path => join('./src/templates', path))
 
@@ -26,14 +22,20 @@ const clean = () => ({
   
 })
 export default [{
-  input,
+  input: [
+    './src/index.ts',
+    './src/fields.ts',
+    './src/monaco-loader.ts'
+  ],
   output: {
     dir: './exports',
     format: 'es'
   },
   external: [
-    './identity.js',
-    './monaco-loader.js'
+    './ts-worker.js',
+    './html-worker.js',
+    './css-worker.js',
+    './editor-worker.js'
   ],
   plugins: [
     clean(),
