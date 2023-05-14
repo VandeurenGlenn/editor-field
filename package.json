@@ -1,6 +1,6 @@
 {
   "name": "@vandeurenglenn/editor-fields",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Editor view using Monaco",
   "type": "module",
   "exports": {
