@@ -73,8 +73,7 @@ export class EditorFields extends HTMLElement {
     this.#fields[fieldId - 1].setModel(this.getModel(path));
   }
 
-  addField(path?: any, code?: any, language?: any, direction: FieldDirection = 'horizontal') {
-    
+  addField(path?: any, code?: any, language?: any, direction: FieldDirection = 'horizontal') { 
     const span = document.createElement('span')
     span.classList.add('container')
 
@@ -96,7 +95,6 @@ export class EditorFields extends HTMLElement {
       rows[1].appendChild(span)
     }
 
-    
     const field = monaco.editor.create(span, {
       theme: this.theme,
       language,
@@ -109,10 +107,8 @@ export class EditorFields extends HTMLElement {
     field.direction = direction
     this.#fields[totalFields] = field
 
-    const horizontalFields = this.#fields.filter(field => field.direction === 'horizontal')
     const verticalFields = this.#fields.filter(field => field.direction === 'vertical')
  
-    
     if(verticalFields.length > 0) {
       this.style.setProperty(`--editor-container-height`, `${this.clientHeight / rows.length}px`)
       const verticalContainers: HTMLElement[] = Array.from(rows[1].querySelectorAll('.container'))
@@ -139,6 +135,23 @@ export class EditorFields extends HTMLElement {
   }
   
   resizeFields() {
+    const rows = Array.from(this.shadowRoot.querySelectorAll('.row'))
+    const verticalFields = this.#fields.filter(field => field.direction === 'vertical')
+ 
+    if(verticalFields.length > 0) {
+      this.style.setProperty(`--editor-container-height`, `${this.clientHeight / rows.length}px`)
+      const verticalContainers: HTMLElement[] = Array.from(rows[1].querySelectorAll('.container'))
+      for (const container of verticalContainers) {
+        container.style.setProperty(`--editor-container-width`, `${this.clientWidth / verticalContainers.length}px`)
+      }
+    } 
+
+    const horizontalContainers: HTMLElement[] = Array.from(rows[0].querySelectorAll('.container'))
+
+    for (const container of horizontalContainers) {
+      container.style.setProperty(`--editor-container-width`, `${this.clientWidth / horizontalContainers.length}px`)
+    }
+
     for (const field of this.#fields) {
       field.layout()
     }
@@ -177,7 +190,7 @@ export class EditorFields extends HTMLElement {
     width: 100%;
   }
 .container {
-  display: inline-block;
+  display: block;
   
   width: var(--editor-container-width, 100%);
   height: var(--editor-container-height, 100%);
