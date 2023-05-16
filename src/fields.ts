@@ -125,7 +125,7 @@ export class EditorFields extends HTMLElement {
 
     this.setupTriggerSuggestOnDoubleEnter(field)
     this.setModel(path, code, language, this.#fields.length)
-    this.#fields.length > 1 && this.resizeFields()
+    this.#fields.length > 1 && this.resizeFields(rows)
   }
 
   removeField(field: number) {
